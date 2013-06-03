@@ -180,3 +180,13 @@ void msp1202_puts(const char *str)
 		msp1202_putc((uint8_t)str[i], 0);
 	msp1202_flush();
 }
+
+void lcd_putc(const unsigned int c)
+{
+	msp1202_putc((uint8_t)c, 1);
+}
+
+void lcd_puts(const char *str)
+{
+	msp1202_puts(str);
+}

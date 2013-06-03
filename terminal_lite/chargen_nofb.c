@@ -140,3 +140,13 @@ void msp1202_puts(const char *str)
 	for (i=0; i < j; i++)
 		msp1202_putc((uint8_t)str[i]);
 }
+
+void lcd_putc(const unsigned int c)
+{
+	msp1202_putc((uint8_t)c);
+}
+
+void lcd_puts(const char *str)
+{
+	msp1202_puts(str);
+}
