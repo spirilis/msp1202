@@ -57,8 +57,8 @@ uint16_t spi_transfer9(uint16_t inw)
 	P1OUT &= ~(BIT5 | BIT6 | BIT7);
 	P1DIR = (p1dir_save & ~(BIT5 | BIT6 | BIT7)) | BIT5 | BIT7;  // Maybe save a memory-read by reusing p1dir_save
 
-	P1SEL &= ~(BIT5 | BIT6 | BIT7);
 	P1SEL2 &= ~(BIT5 | BIT6 | BIT7);
+	P1SEL &= ~(BIT5 | BIT6 | BIT7);
 
 	if (inw & 0x0100)
 		P1OUT |= BIT7;  // Set MOSI before initial SCLK edge

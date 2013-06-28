@@ -21,6 +21,7 @@ int main()
 
 	spi_init();
 	msp1202_init();
+	ste2007_contrast(8);
 	msp1202_puts("Hi there my\n");
 	msp1202_puts("name is Eric.\n");
 	msp1202_move(8, 0);
