@@ -10,6 +10,7 @@ SRCS			:= ste2007.c usci_spi.c chargen.c lcd_printf.c
 TEST_TERMINAL		:= test_terminal.c
 TEST_PRINTF		:= test_printf.c
 TEST_PUSHBTN		:= test_pushbtn.c
+TEST_G2955		:= test_g2955.c
 
 all:			test_terminal.elf
 
@@ -21,6 +22,9 @@ test_printf.elf:	$(OBJS)
 
 test_pushbtn.elf:	$(OBJS)
 	$(CC) $(CFLAGS) -o test_pushbtn.elf $(SRCS) $(TEST_PUSHBTN)
+
+test_g2955.elf:		$(OBJS)
+	$(CC) $(CFLAGS) -mmcu=msp430g2955 -o test_g2955.elf $(SRCS) $(TEST_G2955)
 
 install:	test_terminal.elf
 	mspdebug rf2500 "prog test_terminal.elf"

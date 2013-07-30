@@ -7,10 +7,19 @@
 void spi_init()
 {
 	/* Configure ports on MSP430 device for USCI_B */
+#ifndef __MSP430_HAS_TB3__
+	// G2xx3 devices
 	P1DIR |= BIT5 | BIT7;
 	P1DIR &= ~BIT6;
 	P1SEL |= BIT5 | BIT6 | BIT7;
 	P1SEL2 |= BIT5 | BIT6 | BIT7;
+#else
+	// New G2xx4/G2xx5 devices
+	P3DIR |= BIT1 | BIT3;
+	P3DIR &= ~BIT2;
+	P3SEL |= BIT1 | BIT2 | BIT3;
+	P3SEL2 &= ~(BIT1 | BIT2 | BIT3);
+#endif
 
 	/* USCI-B specific SPI setup */
 	UCB0CTL1 |= UCSWRST;
@@ -43,6 +52,8 @@ uint16_t spi_transfer16(uint16_t inw)
 	return retw;
 }
 
+#ifndef __MSP430_HAS_TB3__
+// G2xx3 devices
 uint16_t spi_transfer9(uint16_t inw)
 {
 	uint16_t retw = 0;
@@ -79,4 +90,46 @@ uint16_t spi_transfer9(uint16_t inw)
 
 	return retw;
 }
+
+#else
+
+// New G2xx4/G2xx5 devices
+uint16_t spi_transfer9(uint16_t inw)
+{
+	uint16_t retw = 0;
+	uint8_t p3dir_save, p3out_save, p3ren_save;
+
+	// SPI mode 0, MSB first, bit #9 sent manually first
+	p3dir_save = P3DIR;
+	p3out_save = P3OUT;
+	p3ren_save = P3REN;
+
+	P3REN &= ~(BIT1 | BIT2 | BIT3);
+	P3OUT &= ~(BIT1 | BIT2 | BIT3);
+	P3DIR = (p3dir_save & ~(BIT1 | BIT2 | BIT3)) | BIT1 | BIT3;  // Maybe save a memory-read by reusing p3dir_save
+
+	P3SEL2 &= ~(BIT1 | BIT2 | BIT3);
+	P3SEL &= ~(BIT1 | BIT2 | BIT3);
+
+	if (inw & 0x0100)
+		P3OUT |= BIT1;  // Set MOSI before initial SCLK edge
+	P3OUT |= BIT3;  // SCLK high
+	// Sample MISO
+	if (P3IN & BIT2)
+		retw |= 0x0100;
+	P3OUT &= ~BIT3; // SCLK low
+	// Return port state over to USCI
+	P3SEL |= BIT1 | BIT2 | BIT3;
+	//P3SEL2 |= BIT1 | BIT2 | BIT3;
+	P3DIR = p3dir_save;
+	P3OUT = p3out_save;
+	P3REN = p3ren_save;
+
+	// Transfer the remaining 8 bits
+	retw |= spi_transfer((uint8_t)(inw & 0x00FF));
+
+	return retw;
+}
+#endif
+
 #endif
