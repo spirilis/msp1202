@@ -60,6 +60,7 @@ void lcd_printf(char *format, ...)
                     lcd_putc(va_arg(a, int));   // Char gets promoted to Int in args, so it's an int we're looking for (GCC warning)
                     break;
                 case 'i':                       // 16 bit Integer
+                case 'd':                       // 16 bit Integer
                 case 'u':                       // 16 bit Unsigned
                     i = va_arg(a, int);
                     if(c == 'i' && i < 0) i = -i, lcd_putc('-');
