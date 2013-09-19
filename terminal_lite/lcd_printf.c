@@ -63,7 +63,7 @@ void lcd_printf(char *format, ...)
                 case 'd':                       // 16 bit Integer
                 case 'u':                       // 16 bit Unsigned
                     i = va_arg(a, int);
-                    if(c == 'i' && i < 0) i = -i, lcd_putc('-');
+                    if( (c == 'i' || c == 'd') && i < 0 ) i = -i, lcd_putc('-');
                     xtoa((unsigned)i, dv + 5);
                     break;
                 case 'l':                       // 32 bit Long
