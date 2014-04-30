@@ -6,7 +6,7 @@ MSPDEBUG	:= mspdebug
 CFLAGS		:= -Os -Wall -Werror -g -mmcu=$(TARGETMCU)
 CFLAGS += -fdata-sections -ffunction-sections -Wl,--gc-sections
 
-SRCS			:= ste2007.c usci_spi.c
+SRCS			:= ste2007.c msp430_spi.c
 TEST_SIMPLE		:= test_simple.c
 
 all:			test_simple.elf
