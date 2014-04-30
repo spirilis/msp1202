@@ -14,11 +14,13 @@ int main()
 
 	//__delay_cycles(8000);  // Short delay to let the LCD wake up -- turns out this isn't necessary
 	// Chip select
-	P2DIR |= BIT0;
-	P2OUT |= BIT0;  // Drive it high to disable LCD
-	// Backlight
 	P2DIR |= BIT5;
-	P2OUT |= BIT5; // Turn on backlight
+	P2OUT |= BIT5;  // Drive it high to disable LCD
+	// Backlight
+	P2SEL &= ~BIT6;
+	P2SEL2 &= ~BIT6;
+	P2DIR &= ~BIT6;
+	P2OUT &= ~BIT6; // Turn on backlight
 
 	spi_init();
 	msp1202_init();
@@ -40,5 +42,5 @@ int main()
 
 void test_chipselect(uint8_t onoff)
 {
-	P2OUT = (P2OUT & ~BIT0) | (onoff & 0x01);
+	P2OUT = (P2OUT & ~BIT5) | (onoff & 0x01);
 }
