@@ -35,7 +35,7 @@
 #include <msp430.h>
 #include <stdint.h>
 #include "ste2007.h"
-#include "usci_spi.h"
+#include "msp430_spi.h"
 
 
 /* This is a generic and will require tweaking for each specific environment

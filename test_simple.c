@@ -1,6 +1,6 @@
 #include <msp430.h>
 #include <stdint.h>
-#include "usci_spi.h"
+#include "msp430_spi.h"
 #include "ste2007.h"
 #include "font_5x7.h"
 

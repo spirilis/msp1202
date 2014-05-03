@@ -1,7 +1,7 @@
 #include <msp430.h>
 #include <stdint.h>
 #include "chargen.h"
-#include "usci_spi.h"
+#include "msp430_spi.h"
 
 int main()
 {

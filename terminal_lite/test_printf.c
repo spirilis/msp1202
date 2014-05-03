@@ -1,7 +1,7 @@
 #include <msp430.h>
 #include <stdint.h>
 #include "chargen_nofb.h"
-#include "usci_spi.h"
+#include "msp430_spi.h"
 #include "lcd_printf.h"
 
 int main()
