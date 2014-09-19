@@ -55,7 +55,7 @@ void msp1202_writechar(uint8_t ch)
 void msp1202_putc(uint8_t c)
 {
 	// Process the character as is
-	if (c > 0x80)  // High-bit characters treated as spaces (except 0x80 which is the cursor)
+	if (c > 0x82)  // High-bit characters treated as spaces (except 0x80 which is the cursor)
 		c = 0x20;
 
 	if (c >= 0x20) {
