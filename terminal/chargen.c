@@ -53,9 +53,6 @@ void msp1202_putc(uint8_t c, uint8_t doflush)
 	uint8_t i = 0;
 
 	// Process the character as is
-	if (c > 0x80)  // High-bit characters treated as spaces (except 0x80 which is the cursor)
-		c = 0x20;
-
 	if (c >= 0x20) {
 		msp1202_framebuffer[msp1202_y * MSP1202_COLUMNS + msp1202_x] = c;
 

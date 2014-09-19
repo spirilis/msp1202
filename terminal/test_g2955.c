@@ -9,19 +9,26 @@ int main()
 
 	DCOCTL = CALDCO_16MHZ;
 	BCSCTL1 = CALBC1_16MHZ;
-	BCSCTL2 = DIVS_1;  // SMCLK = DCO/2 (8MHz)
+	BCSCTL2 = DIVS_3;  // SMCLK = DCO/8 (2MHz)
 
 	//__delay_cycles(8000);  // Short delay to let the LCD wake up -- turns out this isn't necessary
 	// Chip select
-	P4SEL &= ~BIT2;
-	P4SEL2 &= ~BIT2;
-	P4DIR |= BIT2;
-	P4OUT |= BIT2;  // Drive it high to disable LCD
-	// Backlight
+	P2SEL &= ~BIT4;
+	P2SEL2 &= ~BIT4;
+	P2REN &= ~BIT4;
 	P2DIR |= BIT4;
-	P2OUT &= ~BIT4; // Turn on backlight
+	P2OUT |= BIT4;  // Drive it high to disable LCD
+	// Backlight
+	P3SEL &= ~BIT6;
+	P3SEL2 &= ~BIT6;
+	P3REN &= ~BIT6;
+	P3DIR |= BIT6;
+	P3OUT |= BIT6; // Turn on backlight
 
 	spi_init();
+	// 250ms delay to let the Nokia display wake up out of RESET
+	__delay_cycles(16000000 / 4);
+
 	msp1202_init();
 	ste2007_contrast(8);
 	msp1202_puts("Hi there my\n");
@@ -42,5 +49,8 @@ int main()
 
 void test_chipselect(uint8_t onoff)
 {
-	P4OUT = (P4OUT & ~BIT2) | ((onoff & 0x01) << 2);
+	if (onoff)
+		P2OUT |= BIT4;
+	else
+		P2OUT &= ~BIT4;
 }

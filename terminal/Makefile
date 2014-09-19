@@ -1,4 +1,4 @@
-TARGETMCU	?= msp430g2553
+TARGETMCU	?= msp430g2955
 
 CROSS		:= msp430-
 CC		:= $(CROSS)gcc
@@ -12,6 +12,8 @@ TEST_TERMINAL		:= test_terminal.c
 TEST_PRINTF		:= test_printf.c
 TEST_PUSHBTN		:= test_pushbtn.c
 TEST_G2955		:= test_g2955.c
+TEST_G2955_2		:= test_g2955_2.c
+TEST_G2955_MF		:= test_g2955_mf.c
 TEST_F5529		:= test_f5529.c clockinit.c vcore.c
 
 all:			test_terminal.elf
@@ -27,6 +29,12 @@ test_pushbtn.elf:	$(OBJS)
 
 test_g2955.elf:		$(OBJS)
 	$(CC) $(CFLAGS) -mmcu=msp430g2955 -o test_g2955.elf $(SRCS) $(USCI_SPI) $(TEST_G2955)
+
+test_g2955_2.elf:		$(OBJS)
+	$(CC) $(CFLAGS) -mmcu=msp430g2955 -o test_g2955_2.elf $(SRCS) $(USCI_SPI) $(TEST_G2955_2)
+
+test_g2955_mf.elf:		$(OBJS)
+	$(CC) $(CFLAGS) -mmcu=msp430g2955 -o test_g2955_mf.elf $(SRCS) $(USCI_SPI) $(TEST_G2955_MF)
 
 test_f5529.elf:		$(OBJS)
 	$(CC) $(CFLAGS) -mmcu=msp430f5529 -mmemory-model=huge -o test_f5529.elf $(SRCS) $(USCI_SPI) $(TEST_F5529)
