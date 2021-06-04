@@ -71,7 +71,6 @@ requires at least 256 bytes, while the default (for the MSP430FR2433, anyhow) is
 
 Go to the CCS project's
 Properties > *Build* > *MSP430 Linker* > *Basic Options*
-and set the "*Heap size for C/C++ dynamic memory allocation*" to 512 or more.  This allocates memory
-out of SRAM, so be sure your chip has enough SRAM.  I have found 768 works fine with the
-MSP430FR2433 - but mind you - I haven't written anything intense enough to fill up the SRAM on
-this chip yet.  The value needs to be at least 256.
+and set the "*Heap size for C/C++ dynamic memory allocation*" to 256 or more.  More may be safer.This allocates memory out of SRAM, so be sure your chip has enough SRAM.  I have found 768
+works fine with the MSP430FR2433 - but mind you - I haven't written anything intense enough to
+fill up the SRAM on this chip yet (it has 4KB).  The value needs to be at least 256.
