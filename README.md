@@ -111,11 +111,11 @@ Copy the following files into your CCS project:
     msp430_spi.h
     ste2007.c
     ste2007.h
+    font_5x7.h
     terminal/chargen.c
     terminal/chargen.h
     terminal/msp430_stdio.c
     terminal/msp430_stdio.h
-    terminal/font_5x7.h
 
 Edit ste2007.h and provide a correct function name for the ChipSelect setting implementation; this
 is critical to the MSP1202 library's implementation:
