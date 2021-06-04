@@ -60,6 +60,9 @@ uint16_t spi_transfer9(uint16_t word_to_transmit);
   ``terminal_lite``
 - Easter Egg!  The ``font_5x7.h`` font set includes 2 characters - 0x81 and 0x82 - when printed
   side-by-side on the LCD, it will display the [Texas Instruments](https://ti.com) logo ;-)
+- Using this library for doing bitmap graphics would require writing directly for the *ste2007.c*
+  code library, and ignoring the *terminal* or *terminal_lite* higher-level functions, which
+  are explained below.
 
 ### terminal implementation
 
