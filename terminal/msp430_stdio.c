@@ -24,31 +24,36 @@
     DEALINGS IN THE SOFTWARE.
  */
 
-#include "msp430-stdio.h"
+#include "msp430_stdio.h"
 
 /* Implemented functions for Nokia 1202 LCD output using printf() et al */
 
 static int msp1202_filedes = 0;
 
 /// Register the MSP1202 driver as "msp1202"
-void MSP1202_register_driver()
+int MSP1202_register_driver()
 {
-   add_device("msp1202", _MSA,
+   if (0 != add_device("msp1202", _MSA,
       MSP1202_open,
       MSP1202_close,
       MSP1202_read,
       MSP1202_write,
       MSP1202_lseek,
       MSP1202_unlink,
-      MSP1202_rename);
+      MSP1202_rename)) {
+       return -1;
+   }
+   return 0;
 }
 
 /// Helper function to register the msp1202 driver & freopen stdout
 /// @param[out] Returns 0 if successful, -1 if failed
 int MSP1202_use_as_stdout()
 {
-   MSP1202_register_driver();
-   if (!freopen("msp1202:", "w", stdout)) {
+   if (0 != MSP1202_register_driver()) {
+       return -1;
+   }
+   if (!freopen("msp1202:16", "w", stdout)) {
       return -1;
    }
    // Attempt to configure stdout for line-buffering.

@@ -36,11 +36,18 @@
 #include "chargen.h"
 
 /* Function prototypes for user functions - setting up the driver */
-int MSP1202_use_as_stdout();  // This will register the driver & freopen(stdout) for you.
-void MSP1202_register_driver();  // DO NOT use this if using MSP1202_use_as_stdout !!
+
+/// This will register the driver & freopen(stdout) for you.
+/// @param[out] 0 if successful, -1 on failure
+int MSP1202_use_as_stdout();
+
+/// DO NOT use this if using MSP1202_use_as_stdout !!
+/// This function runs add_device() to register the driver with the stdio subsystem.
+/// @param[out] 0 if successful, -1 on failure
+int MSP1202_register_driver();
+
 
 /* Function prototypes for the low-level driver */
-
 int MSP1202_open(const char *, unsigned, int);
 int MSP1202_close(int);
 int MSP1202_read(int, char *, unsigned);
