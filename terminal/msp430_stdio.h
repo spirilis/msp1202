@@ -35,6 +35,10 @@
 #include "msp430_spi.h"
 #include "chargen.h"
 
+/* Function prototypes for user functions - setting up the driver */
+int MSP1202_use_as_stdout();  // This will register the driver & freopen(stdout) for you.
+void MSP1202_register_driver();  // DO NOT use this if using MSP1202_use_as_stdout !!
+
 /* Function prototypes for the low-level driver */
 
 int MSP1202_open(const char *, unsigned, int);
