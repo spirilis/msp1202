@@ -4,13 +4,96 @@ msp1202
 MSP430 library to support Nokia 1202 / STE2007 LCD displays
 
 ## SYNOPSIS
+
 - msp1202 includes the STE2007 library for primitive I/O to the Nokia 1202 LCD
 - STE2007 library utilizes an SPI layer provided by msp430_spi.c (MSP430 Value Line G2xx3 series) but can be custom-tailored to your application by editing ste2007.c and redefining the STE2007_SPI_TRANSFER9() and STE2007_CHIPSELECT() macros.  You may need to adjust the #include's in ste2007.c to make your SPI functions available.
 - Advanced support for framebuffer-based text console and non-framebuffer-based text console is included in the terminal/ and terminal_lite/ subdirectories.
-- Example main() programs included in each directory as test_*.c
+- Example main() programs included in ``archived`` directory as test_*.c
 - Examples based on bluehash @ 43oh.com's Nokia 1202 BoosterPack with P2.0 for the LCD's SPI Chip Select and P2.5 for the backlight LED.  BoosterPack modified to connect to a USCI_B port on the G2xx3 chips.
 - Support for MSP430 Optimizing C/C++ compiler's stdio library is provided in
   ``terminal/msp430_stdio.c`` and ``terminal/msp430_stdio.h``.  General use-case specified below.
+
+## Organization
+
+The source code files are organized in the main folder and subfolders based on feature set-
+
+Core files:
+
+    msp430_spi.c
+    msp430_spi.h
+    ste2007.c
+    ste2007.h
+    font_5x7.h
+
+- The msp430_spi.* files contain drivers for SPI, and you may need to edit ``msp430_spi.h`` to
+  define which peripheral (USCI_A, B, A0, A1, B0, B1, etc) you're using.
+- The implementation is highly specific to the chip, not just the family, so many chips are not
+  implemented.
+- One of the trickiest pieces of the implementation is ``spi_transfer9()``, a function to perform
+  9-bit SPI.  As most peripherals only support 8-bit SPI, this is implemented using a quick
+  deconfiguration of the SPI mode for the SPI CLK, MOSI/SIMO, MISO/SOMI pins and manually driving
+  SPI in mode #0 for the most-significant-bit, followed by reconfiguring the SPI mode of the
+  GPIOs and using the standard 8-bit SPI transfer function.
+- This ``spi_transfer9()`` function just happens to be critical for the Nokia 1202 LCD
+  implementation, as it does not break out the D/C line into a separate GPIO.  Thus, the
+  9th bit is necessary to indicate data vs. control frames.
+- For each chip I have implemented in ``msp430_spi.c``, I have tried to implement all of the
+  available USCI or eUSCI peripherals on their default GPIO pins.  Things may get dicey and you
+  may have to write some code in here, or trash the msp430_spi.* files altogether and write
+  your own custom implementation of the SPI driver if you need
+  to remap the SPI peripheral pins using a chip that supports a pin mapper.
+- The only functions strictly necessary for *ste2007.c*'s operation are:
+
+    void spi_init();
+    uint8_t spi_transfer(uint8_t byte_to_transmit);
+    uint16_t spi_transfer9(uint16_t word_to_transmit);
+
+- The ``spi_transfer16()`` function is not utilized by *ste2007.c*
+- The default ``font_5x7.h`` is used by the higher-level driver functions in ``terminal`` and
+  ``terminal_lite``
+
+### terminal implementation
+
+The files under ``terminal/`` subfolder include:
+
+chargen.c
+chargen.h
+lcd_printf.c
+lcd_printf.h
+msp430_stdio.c
+msp430_stdio.h
+
+- You may use the "lcd_printf" or the "msp430_stdio" implementation, both are not strictly
+  required.  You can also use the msp1202_* functions by themselves without those libraries,
+  only utilizing the functions found in ``chargen.c``
+- *chargen.c* provides a concept of a framebuffer, and primitive functions for writing characters
+  to the LCD screen, using a 16x8 display size.  Handling of font bit-writes, keeping track of
+  dirty characters (characters whose contents have changed), maintaining the concept of a "cursor"
+  is all handled with this code.
+- The implementation of an on-screen cursor may be disabled - or the cursor itself modified -
+  by editing ``chargen.h`` and tweaking the #define's near the top.
+- *lcd_printf* provides a basic implementation of printf derived from some codebase I've long
+  since forgotten where I found it.  I've tested this with MSPGCC and TI's proprietary compiler,
+  it works fine but lacks some features.
+- *msp430_stdio* is a new implementation, for the TI proprietary *cl430* compiler only, and it
+  implements the C STDIO interface.  This is explained 2 sections below in [Using the stdio implementation]
+
+### terminal_lite implementation
+
+The files under ``terminal_lite/`` subfolder include:
+
+    chargen_nofb.c
+    chargen_nofb.h
+    lcd_printf.c
+    lcd_printf.h
+
+- This is similar to the *terminal* implementation explained in the previous section, except
+  no framebuffer concept exists - characters are written or re-written on the display as needed.
+- A cursor exists here and can be turned off by editing ``chargen_nofb.h``
+- The same *lcd_printf* implementation as *terminal* exists here, but no *msp430_stdio* 
+  implementation.  I figured the basic memory requirements for STDIO are high enough that tiny
+  chips won't use it - and if you're using a chip with plenty of SRAM for STDIO, you can
+  probably fit the small (144) byte framebuffer+dirtybit bitfield in your SRAM as well.
 
 ---
 
