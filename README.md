@@ -57,3 +57,21 @@ contrast, you can do this 2 ways:
 ``freopen("msp1202:<contrast value>", "w", stdout);``
 
 e.g. ``freopen("msp1202:31", "w", stdout);``
+
+Upon completion of the driver registration/initialization, you should be able to do:
+
+``printf("Hello, world!\n");``
+
+and see Hello, world! at the top of the display with the cursor at the left of the 2nd line.
+
+## GOTCHAS when using stdio
+
+The C linker's heap size setting needs to be extended - the printf() implementation et al
+requires at least 256 bytes, while the default (for the MSP430FR2433, anyhow) is 160.
+
+Go to the CCS project's
+Properties > *Build* > *MSP430 Linker* > *Basic Options*
+and set the "Heap size for C/C++ dynamic memory allocation" to 512 or more.  This allocates memory
+out of SRAM, so be sure your chip has enough SRAM.  I have found 768 works fine with the
+MSP430FR2433 - but mind you - I haven't written anything intense enough to fill up the SRAM on
+this chip yet.  The value needs to be at least 256.
