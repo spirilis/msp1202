@@ -44,7 +44,7 @@ Core files:
   to remap the SPI peripheral pins using a chip that supports a pin mapper.
 - The only functions strictly necessary for *ste2007.c*'s operation are:
 
-```
+```c
 void spi_init();
 uint8_t spi_transfer(uint8_t byte_to_transmit);
 uint16_t spi_transfer9(uint16_t word_to_transmit);
@@ -58,12 +58,12 @@ uint16_t spi_transfer9(uint16_t word_to_transmit);
 
 The files under ``terminal/`` subfolder include:
 
-chargen.c
-chargen.h
-lcd_printf.c
-lcd_printf.h
-msp430_stdio.c
-msp430_stdio.h
+    chargen.c
+    chargen.h
+    lcd_printf.c
+    lcd_printf.h
+    msp430_stdio.c
+    msp430_stdio.h
 
 - You may use the "lcd_printf" or the "msp430_stdio" implementation, both are not strictly
   required.  You can also use the msp1202_* functions by themselves without those libraries,
