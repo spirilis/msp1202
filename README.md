@@ -78,7 +78,7 @@ The files under ``terminal/`` subfolder include:
   since forgotten where I found it.  I've tested this with MSPGCC and TI's proprietary compiler,
   it works fine but lacks some features.
 - *msp430_stdio* is a new implementation, for the TI proprietary *cl430* compiler only, and it
-  implements the C STDIO interface.  This is explained 2 sections below in [Using the stdio implementation]
+  implements the C STDIO interface.  This is explained 2 sections below in _Using the stdio implementation_
 
 ### terminal_lite implementation
 
