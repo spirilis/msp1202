@@ -9,3 +9,50 @@ MSP430 library to support Nokia 1202 / STE2007 LCD displays
 - Advanced support for framebuffer-based text console and non-framebuffer-based text console is included in the terminal/ and terminal_lite/ subdirectories.
 - Example main() programs included in each directory as test_*.c
 - Examples based on bluehash @ 43oh.com's Nokia 1202 BoosterPack with P2.0 for the LCD's SPI Chip Select and P2.5 for the backlight LED.  BoosterPack modified to connect to a USCI_B port on the G2xx3 chips.
+- Support for MSP430 Optimizing C/C++ compiler's stdio library is provided in
+  ``terminal/msp430_stdio.c`` and ``terminal/msp430_stdio.h``.  General use-case specified below.
+
+---
+
+## Using the stdio implementation
+
+Copy the following files into your CCS project:
+    msp430_spi.c
+    msp430_spi.h
+    ste2007.c
+    ste2007.h
+    terminal/chargen.c
+    terminal/chargen.h
+    terminal/msp430_stdio.c
+    terminal/msp430_stdio.h
+    terminal/font_5x7.h
+
+Edit ste2007.h and provide a correct function name for the ChipSelect setting implementation; this
+is critical to the MSP1202 library's implementation:
+
+    // Chip Select line drive; takes 0 or 1 to set the CS line low or high
+    #define STE2007_CHIPSELECT(x) test_chipselect(x)
+    void test_chipselect(uint8_t);  // Declared in the main .c file we'll be using
+
+Replace ``test_chipselect`` with a different function you supply in your code.  
+This function needs to take a single unsigned char argument, which is 0 or 1.  
+If it's 0, the requisite Chip Select GPIO for the LCD should be switched off.  
+If it's 1, the Chip Select GPIO should be switched on.
+
+See ``msp430_stdio.h`` for the function prototypes.  You will typically use
+``MSP1202_use_as_stdio()`` in your code.  This will register the driver and *freopen()*
+the *stdout* data stream.  As this occurs, the library will call:
+
+    spi_init();
+    msp1202_init();
+
+The screen will go blank and a cursor will show up in the upper left corner of the LCD.
+Note the contrast control will be set to 16 (range: 0-31).  If you wish to use a different
+contrast, you can do this 2 ways:
+
+1. Use the *ste2007_contrast()* function to change the contrast
+2. Rerun *freopen()* like such:
+
+``freopen("msp1202:<contrast value>", "w", stdout);``
+
+e.g. ``freopen("msp1202:31", "w", stdout);``
