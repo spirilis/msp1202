@@ -53,6 +53,8 @@ uint16_t spi_transfer9(uint16_t word_to_transmit);
 - The ``spi_transfer16()`` function is not utilized by *ste2007.c*
 - The default ``font_5x7.h`` is used by the higher-level driver functions in ``terminal`` and
   ``terminal_lite``
+- Easter Egg!  The ``font_5x7.h`` font set includes 2 characters - 0x81 and 0x82 - when printed
+  side-by-side on the LCD, it will display the [Texas Instruments](https://ti.com) logo ;-)
 
 ### terminal implementation
 
