@@ -17,6 +17,7 @@ MSP430 library to support Nokia 1202 / STE2007 LCD displays
 ## Using the stdio implementation
 
 Copy the following files into your CCS project:
+
     msp430_spi.c
     msp430_spi.h
     ste2007.c
