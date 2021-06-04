@@ -44,9 +44,11 @@ Core files:
   to remap the SPI peripheral pins using a chip that supports a pin mapper.
 - The only functions strictly necessary for *ste2007.c*'s operation are:
 
-    void spi_init();
-    uint8_t spi_transfer(uint8_t byte_to_transmit);
-    uint16_t spi_transfer9(uint16_t word_to_transmit);
+```
+void spi_init();
+uint8_t spi_transfer(uint8_t byte_to_transmit);
+uint16_t spi_transfer9(uint16_t word_to_transmit);
+```
 
 - The ``spi_transfer16()`` function is not utilized by *ste2007.c*
 - The default ``font_5x7.h`` is used by the higher-level driver functions in ``terminal`` and
