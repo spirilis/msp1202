@@ -96,6 +96,10 @@ The files under ``terminal_lite/`` subfolder include:
   implementation.  I figured the basic memory requirements for STDIO are high enough that tiny
   chips won't use it - and if you're using a chip with plenty of SRAM for STDIO, you can
   probably fit the small (144) byte framebuffer+dirtybit bitfield in your SRAM as well.
+- There is no ``msp1202_flush()`` function in the *terminal_lite* implementation because there is
+  no framebuffer or "dirty-bits" concept.  Every write commits to the screen right away.
+- This implementation may be chattier and less performant than the *terminal* implementation but
+  it reduces memory requirements for chips sporting smaller SRAM footprint.
 
 ---
 
