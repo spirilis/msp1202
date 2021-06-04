@@ -50,7 +50,12 @@ uint8_t spi_transfer(uint8_t byte_to_transmit);
 uint16_t spi_transfer9(uint16_t word_to_transmit);
 ```
 
-- The ``spi_transfer16()`` function is not utilized by *ste2007.c*
+- *uint8_t* is an alias for *unsigned char* on the MSP430, although *char* would probably work
+  fine, it just might throw some compiler warnings.
+- Likewise *uint16_t* is an alias for *unsigned int*, and *int* would work but it may throw
+  some compiler warnings.
+- The ``spi_transfer16()`` function is not utilized by *ste2007.c* so you wouldn't need to
+  implement it.
 - The default ``font_5x7.h`` is used by the higher-level driver functions in ``terminal`` and
   ``terminal_lite``
 - Easter Egg!  The ``font_5x7.h`` font set includes 2 characters - 0x81 and 0x82 - when printed
